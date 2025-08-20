@@ -14,6 +14,7 @@ class AgentState(TypedDict):
 
 document_content = ""
 
+i=0
 
 @tool
 def update(content: str) -> str:
@@ -21,6 +22,7 @@ def update(content: str) -> str:
 
     global document_content
     document_content = content
+    print(f"update tool {i+1}")
     return f"Document has been updated successfully! The current content is:\n{document_content}"
 
 
@@ -31,6 +33,7 @@ def save(file_name: str) -> str:
         filename: name for the text file
     """
 
+    print(f"save tool {i+1}")
     global document_content
 
     if not file_name.endswith(".txt"):
@@ -74,6 +77,8 @@ def agent(state: AgentState) ->AgentState:
 
     response = llm.invoke(all_messages)
 
+    print(f"agent fun() {i+1}")
+
     print(f"\n🤖 AI: {response.content}")
     if hasattr(response, "tool_calls") and response.tool_calls:
         print(f"🔧 USING TOOLS: {[tc['name'] for tc in response.tool_calls]}")
@@ -83,6 +88,8 @@ def agent(state: AgentState) ->AgentState:
 
 def should_continue(state: AgentState) -> str:
     """Determine if we should continue or end the conversation."""
+
+    print(f"should_continue fun() {i+1}")
 
     messages = state["messages"]
     
@@ -100,6 +107,9 @@ def should_continue(state: AgentState) -> str:
 
 def print_messages(messages):
     """Function I made to print the messages in a more readable format"""
+
+    print(f"print_msg fun() {i+1}")
+
     if not messages:
         return
     
